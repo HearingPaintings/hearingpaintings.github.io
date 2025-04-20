@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearing Paintings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Helvetica', sans-serif;
+            line-height: 1.6;
+            color: #000000;
+        }
+
+        .nav-container {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #000000;
+            text-decoration: none;
+            font-family: 'Menlo';
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+            font-family: 'Menlo';
+        }
+
+        .nav-links a:hover {
+            color: #666;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            margin-top: 60px;
+            background-color: #fffdfd;
+            color: rgb(0, 0, 0);
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            scroll-margin-top: 80px; /* 確保跳轉時不被導航欄遮擋 */
+        }
+
+        .header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            filter: blur(5px);
+            opacity: 0.3;
+        }
+
+        .header-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin: 40px 0;
+            scroll-margin-top: 80px; /* 確保跳轉時不被導航欄遮擋 */
+        }
+
+        .text-content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .media-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .media-item {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(115, 115, 115, 0.1);
+        }
+
+        footer {
+            background-color: #3a4046;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .media-container {
+                flex-direction: column;
+            }
+        }
+
+        .video-text-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .text-side, .video-side {
+            width: 48%;
+        }
+
+        .video-side iframe {
+            width: 100%;
+            height: 315px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* 响应式：手机端上下排 */
+        @media (max-width: 768px) {
+            .text-side, .video-side {
+                width: 100%;
+            }
+        }
+
+        .image-text-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .image-text-wrapper .text-side,
+        .image-text-wrapper .image-side {
+            width: 48%;
+        }
+
+        .image-container {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        .image-container img {
+            width: auto;
+            height: 250px; /* 给定相同的高度 */
+            object-fit: cover; /* 保持图片比例，裁剪多余部分 */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .final-image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: fit-content;
+        }
+
+        .image-caption {
+            width: 100%;
+            text-align: left;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            word-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .image-text-wrapper .text-side,
+            .image-text-wrapper .image-side {
+                width: 100%;
+            }
+
+            .image-container {
+                flex-direction: column; /* 在手机上上下排 */
+            }
+
+            .image-container img {
+                width: 100%; /* 让图片在小屏幕上自适应宽度 */
+                height: auto; /* 高度自动 */
+            }
+
+            .final-image-container {
+                width: 100%;
+            }
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 20px;
+            margin-bottom: 40px; /* 增加下方間距 */
+        }
+
+        .image-row img {
+            height: 250px;
+            width: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .image-row2 {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            margin: 20px;
+            margin-bottom: 40px; /* 增加下方間距 */
+        }
+
+        .image-row2 img {
+            height: 350px;
+            width: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .image-single {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 20px;
+            margin-bottom: 40px; /* 增加下方間距 */
+        }
+
+        .image-single img {
+            height: auto;
+            width: 70%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .text-content ul {
+            padding-left: 40px; /* 為ul添加左側縮進 */
+        }
+
+        .text-content li {
+            margin-bottom: 10px; /* 為li添加項目間距 */
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 寬高比 */
+            margin: 20px 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-content">
+            <a href="#top" class="nav-logo">Hearing Paintings</a>
+            <div class="nav-links">
+                <a href="#concept">Concept</a>
+                <a href="#background">Background</a>
+                <a href="#plan">Plan</a>
+                <a href="#final">Final</a>
+                <a href="#method">Method</a>
+                <a href="#discussion">Discussion</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="top">
+        <div class="header-background">
+            <img src="hearingpaintings.png" alt="Background">
+        </div>
+        <div class="container header-content">
+            <h1>Hearing Paintings</h1>
+            <p>Chan Pok Him Jonathan
+               <br>Macha Nourry
+               <br>Yu Zhentao Gavin
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="concept" class="section">
+            <h2>Concept</h2>
+            <div class="text-content">
+              <p class="highlight">Paintings Sonification</p>
+              <p>Our creative project will focus on sonification, which is the process of translating data into sounds. Our data will be extracted from paintings, we would like to offer a new way to experience visual arts. Nowadays artists, alongside museums and galleries are looking for more immersive experiences and new ways to attract visitors. We would like to propose a new perspective on well-known paintings by providing an auditory perception of them as an alternative or complementary way to experience their original visual characteristics.
+              <br>
+              <br>Sonification is strongly linked to computer music as they share the manipulation of digital technology and sound design principles to create and organize sound. Whether used in scientific fields or artistic contexts, sonification enhances our senses and expands our ways to experience and understand the world around us.</p>
+              <br>
+              <p class="highlight">The Connections Between Sonification and Painting</p>
+            
+              <!-- 新的两栏布局 -->
+              <div class="video-text-wrapper">
+                <div class="text-side">
+                  <p>
+                    So, Why famous paintings?
+                    <br>Familiarity breeds engagement: people already have emotional connections and are familiar with the artworks, it is a lot easier to convey concepts like sonification from artworks.
+                    <br>
+                    <br>Example: Starry Night (Van Gogh) → A swirling, dreamy soundscape (using rising/falling arpeggios) mirrors its emotional turbulence, enhancing the viewer-listener's experience.
+                    <br>
+                    <br>Technical benefits from using famous paintings: these well-known paintings often have unique yet strong composited patterns and colors, for example: The Scream (Munch) → Distorted, dissonant sounds (reflecting the anxiety in the painting) vs. a random abstract piece where meaning is unclear.
+                  </p>
+                </div>
+                <div class="video-side">
+                  <iframe 
+                    src="https://www.youtube.com/embed/6Us9AZpDpPc?si=kvNCgkDt5nU4Z8QK" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+
+              <!-- 新的图文两栏布局 -->
+              <div class="image-text-wrapper">
+                <div class="text-side">
+                  <p>
+                    Lack of pre-existing connection → Harder for audiences to engage.
+                    <br>Unclear visual language → Sonification may feel arbitrary.
+                    <br>No shared cultural reference → Less educational or emotional impact.
+                    <br>
+                    <br>Sometimes it is better not to use real-life sounds for sonifications on paintings, the reason for this is that for photos, you can use real-world sounds (e.g., a photo of a forest → nature audio), but for paintings, you can play with a lot more with a different creative approach, it is less subjective onto sound than using pre-existent imagery in real life. The fun in art is to determine its story yourself. Same with sounds on paintings.
+                  </p>
+                </div>
+                <div class="image-side">
+                  <div class="image-container">
+                    <img src="Starry Night.webp" alt="Painting 1" />
+                    <img src="Angst.png" alt="Painting 2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+        </section>
+
+        <section id="background" class="section">
+          <h2>Background</h2>
+          <div class="text-content">
+            <p class="highlight">NASA's Space Sonifications</p>
+            <p>One of our main inspirations was the work conducted by NASA on Space Sonification. While space is mostly quiet, NASA translates the astronomical data collected through the most powerful telescopes around the world into sounds that humans can hear. NASA's sonifications are based on imagery created from scientific data and digital signals. Sonification brings the process of visualizing those data one step further to offer an auditory experience of those images by mapping them into sound. They play with elements such as brightness and position extracted from the pictures and assign to them pitches and volumes. Thanks to this concept NASA also makes space accessible to visually impaired individuals.
+            <br>
+            <br>They collaborate with "SYSTEM Sounds" a sci-art outreach project composed of Matt Russo (Astrophysicist) and Andrew Santaguida (Musician).
+            <br>
+            <br>We found interesting the different axis (displayed below) around which the data were "read". It inspired us to explore a non-linear and more organic way to do it in our project.
+            </p>
+          </div>
+
+          <div class="image-row">
+            <img src="axis 1.png" alt="Axis 1">
+            <img src="axis 2.png" alt="Axis 2">
+            <img src="axis 3.png" alt="Axis 3">
+          </div>
+          
+          <div class="text-content">
+            <p class="highlight">PIXEL SYNTH</p>
+            <p>We also used Pixel Synth made by Olivia Jack which allows us to upload any visuals and play with the different controls and parameters. We used it to better understand how to create our own image-to-sound translation system.</p>
+          </div>
+
+          <div class="image-single">
+            <img src="Pixelsynth.png" alt="pixel synth">
+          </div>
+
+          <div class="text-content">
+            <p class="highlight">Optical Sound</p>
+            <p>We were also inspired by the concept of optical sound which consist in scanning and reading sound graphically represented by density, area and variations thanks to light. While it was originally used for film sountracks we were inspired by Max Hattlers' course in which he taught us to use it to generate unexpected soundtracks and effect directly from our animations. It offers an audio interpretation of each image, or frame depending in their shapes, color intensity and speed.
+            </p>
+          </div>
+
+          <div class="image-row2">
+            <img src="Aeo1.png" alt="Aeo1">
+            <img src="Aeo2.png" alt="Aeo2">
+          </div>
+
+          <section id="plan" class="section">
+            <h2>Plan</h2>
+            <div class="text-content">
+              <p>Inspired by the previously presented works and our own experience with working with sound during and outside of coursework, we would like to use existing paintings and turn their shapes, textures, and colors… into sound. We are interested in sonification and, therefore, in collecting, selecting, and translating data to offer an auditory interpretation of a visual piece of art.</p>
+              <br>
+              <p>We are planning to use the Max as the main software to create our own sonification tool turn the extracted data into MIDI notes and attempt to play music from them (or at least a kind of organized sound). In order to obtain a "musically satisfying" result we will make both technical and aesthetical choices concerning our data collection and processing.</p>
+              <br>
+              <p>We will start by choosing a few art pieces we would like to use and conduct trials and experiments with them to identify which work best or which outcomes are most interesting. We believe experimentation will be the key to making this project successful as we are both new to Max and image sonification.</p>
+              <br>
+
+              <p class="highlight">Paintings Selection Ideas</p>
+              
+            <div class="image-text-wrapper">
+              <div class="text-side">
+                <li>The Scream (Munch) </li>
+                <li>Wassily Kandinsky – Composition VIII (1923)</li>
+                <li>Hokusai – The Great Wave off Kanagawa (1830)</li>
+                <li>Salvador Dalí – The Persistence of Memory (1931)</li>
+                <li>Hieronymus Bosch – The Garden of Earthly Delights (1500s)</li>
+                <li>The Kiss (Gustav Klimt)</li>
+                <li>Jackson Pollock – Number 5, 1948 (Drip Painting)</li>
+             </ul>
+
+              </div>
+              <div class="image-side">
+                <div class="image-container">
+                  <img src="Cross La Plage de Saint-Clair.jpg" alt="Cross La Plage de Saint-Clair">
+                  <img src="Stilllife.jpeg" alt="Stilllife">
+                </div>
+              </div>
+
+              <p class="highlight">Technical Test</p>
+            </div>
+
+        <section id="final" class="section">
+          <div class="text-content">
+            <h2>Final Work</h2>
+              <p class="highlight">The Selected Paintings</p>
+              <p>After conducting trials and experimenting with a  variety of paintings we finally selected three paitings representing different art movements, with different colors, shapes and techniques used. The first painting is by Gustave Courbet and is the realistic expressive representation of a man in mostly dark tones with limited colors. The second painting is from cubism by Pablo Picasso, with geomatrical shapes, bright and diverse colors and bold black lines. The final and third painting is by Henri Edmond Cross and part of the pointillism artistic movement. It is composed of dots of colors put together to form a colorful landscape. 
+              </p>
+            <div class="image-row">
+                <div class="final-image-container">
+                    <img src="thedesperateman.webp" alt="the desperate man">
+                    <div class="image-caption">The Desperate Man, Gustave Courbet, 1844-1845</div>
+                </div>
+                <div class="final-image-container">
+                    <img src="figures at the seaside.jpg" alt="figures at the seaside">
+                    <div class="image-caption">Figures by the Sea, Pablo Picasso 1931</div>
+                </div>
+                <div class="final-image-container">
+                    <img src="Cross La Plage de Saint-Clair.jpg" alt="cross la plage de saint-clair">
+                    <div class="image-caption">Pines Along the Shore, Henri Edmond Cross, 1896</div>
+                </div>
+            </div>
+
+            <div class="text-content">
+               <p class="highlight">The Pather</p>
+               <div class="video-container">
+                 <iframe 
+                   src="https://www.youtube.com/embed/J8XK9zgvO-g?si=6HLP6WS30HYYuxTW" 
+                   title="YouTube video player" 
+                   frameborder="0" 
+                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                   allowfullscreen>
+                 </iframe>
+               </div>
+            </div>
+          </div>
+
+        <section id="method" class="section">
+            <h2>Method</h2>
+            <div class="text-content">
+                <p class="highlight">Max 8 Pather</p>
+                <p>We used Max 9 as our main software and we built our project around two main steps: extracting data, and translating it.</p>
+            </div>
+        </section>
+
+        <section id="discussion" class="section">
+            <h2>Discussion</h2>
+            <div class="text-content">
+                <p>As we are all new learners of Max, this project was for us a technical challenge. We felt limited by our knowledge of the software, but it encouraged us to explore new objects such as the jitter and matrix kinds. However, we still feel like our project could be technically improved and that our sonification might benefit from a more precise data extraction. We are also conscious that the outcome of our project only offers one interpretation of the chosen paintings and that this interpretation will be influenced by our own visual experiences and sound perceptions, and preferences. The results of sonification are affected by both technical and aesthetic choices. This shows one of the main limitations of sonification that we have discovered while researching the topic. We were also interested in the possibility of making our work interactive. Its interactivity was important to us as it had for goal to the possibility for the images to be read in a non-linear manner and provides a more personalized experience to the users. Despite making it interactive through the manipulation of the Max patcher, we believe it could be taken a step further and made more engaging and through gesture or eye tracking.
+                <br>
+                <br>We are open to any suggestions and advice to improve our work. If you have any recommendations please feel free to share them with us, we would be glad to discuss it further.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Hearing Paintings. All Rights Reserved</p>
+        </div>
+    </footer>
+</body>
+</html>
