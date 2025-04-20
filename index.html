@@ -221,7 +221,7 @@
         .final-image-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             width: fit-content;
         }
 
@@ -327,6 +327,36 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        .method-container {
+            display: flex;
+            gap: 40px;
+            margin: 20px 0;
+        }
+
+        .method-text {
+            flex: 1;
+        }
+
+        .method-media {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .method-media img {
+            width: 100%;
+            height: 50%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .method-container {
+                flex-direction: column;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -426,9 +456,9 @@
           </div>
 
           <div class="image-row">
-            <img src="https://raw.githubusercontent.com/HearingPaintings/hearingpaintings.github.io/refs/heads/main/Axis%201.png" alt="Axis 1">
-            <img src="https://raw.githubusercontent.com/HearingPaintings/hearingpaintings.github.io/refs/heads/main/Axis%202.png" alt="Axis 2">
-            <img src="https://raw.githubusercontent.com/HearingPaintings/hearingpaintings.github.io/refs/heads/main/Axis%203.png" alt="Axis 3">
+            <img src="axis1.png" alt="Axis1">
+            <img src="axis2.png" alt="Axis2">
+            <img src="axis3.png" alt="Axis3">
           </div>
           
           <div class="text-content">
@@ -481,8 +511,6 @@
                   <img src="Stilllife.jpeg" alt="Stilllife">
                 </div>
               </div>
-
-              <p class="highlight">Technical Test</p>
             </div>
 
         <section id="final" class="section">
@@ -497,8 +525,8 @@
                     <div class="image-caption">The Desperate Man, Gustave Courbet, 1844-1845</div>
                 </div>
                 <div class="final-image-container">
-                    <img src="figures at the seaside.jpg" alt="figures at the seaside">
-                    <div class="image-caption">Figures by the Sea, Pablo Picasso 1931</div>
+                    <img src="Stilllife.jpeg" alt="Stilllife">
+                    <div class="image-caption">Large Still Life with Pedestal Table, Pablo Picasso, 1931</div>
                 </div>
                 <div class="final-image-container">
                     <img src="Cross La Plage de Saint-Clair.jpg" alt="cross la plage de saint-clair">
@@ -507,7 +535,7 @@
             </div>
 
             <div class="text-content">
-               <p class="highlight">The Pather</p>
+               <p class="highlight">The Patcher</p>
                <div class="video-container">
                  <iframe 
                    src="https://www.youtube.com/embed/J8XK9zgvO-g?si=6HLP6WS30HYYuxTW" 
@@ -521,12 +549,41 @@
           </div>
 
         <section id="method" class="section">
-            <h2>Method</h2>
-            <div class="text-content">
-                <p class="highlight">Max 8 Pather</p>
-                <p>We used Max 9 as our main software and we built our project around two main steps: extracting data, and translating it.</p>
+            <h2>Methods & Prototypes</h2>
+            <div class="method-container">
+              <div class="method-text">
+                <p class="highlight">Max 8 Patcher</p>
+                <p>We used Max 8 as our main software and we built our project around two main steps: extracting data, and translating it.</p>
+                <br>
+                <p class="highlight">Image Processing</p>
+                <p>1.⁠ ⁠A photo is loaded into fpic and resized using attrui's autofit to fit the frame.
+                <br>2.⁠ ⁠The image is then downsized into a 4×7 grid of color blocks for data extraction.</p>
+                <br>
+                <p class="highlight">Data Extraction & Sound Generation</p>
+                <p>1.⁠ ⁠The grid is sent to jit.submatrix @dim 1 8 to extract a 1×8 submatrix.
+                <br>2.⁠ ⁠The data is unpacked using unpack 0 0 0 and converted into corresponding sounds.</p>
+                <br>
+                <p class="highlight">Beat Generation (Parallel Process)</p>
+                <p>1.⁠ ⁠The downsized image (4×7) is unpacked into ARGB channels (Alpha, Red, Green, Blue).
+                <br>2.⁠ ⁠Plane 1 (Red), Plane 2 (Green), and Plane 3 (Blue) output separate data streams.
+                <br>3.⁠ ⁠A 4×7 cellblock aligns with the image grid and connects to a matrix control (also 4×7).
+                <br>4.⁠ ⁠A beat generator and counter use getcolumn to extract matrix columns, syncing beats with the scanned roll.
+                <br>5.⁠ ⁠The matrix control data is unpacked and mapped to different pitches/instruments, creating varied sounds per roll scan.</p>
+              </div>
+              <div class="method-media">
+                <img src="methodpatcher.jpg" alt="methodpatcher">
+                <div class="video-container">
+                  <iframe 
+                    src="https://www.youtube.com/embed/XouO2zqY-tc?si=mXRmfC8hujZLS4UF" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
             </div>
-        </section>
+          </section>
 
         <section id="discussion" class="section">
             <h2>Discussion</h2>
@@ -538,7 +595,6 @@
             </div>
         </section>
     </main>
-            
 
     <footer>
         <div class="container">
